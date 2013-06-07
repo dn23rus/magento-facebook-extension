@@ -27,7 +27,7 @@
     <global>
         <modules>
             <Oggetto_Facebook>
-                <version>1.0.0</version>
+                <version>1.0.2</version>
             </Oggetto_Facebook>
         </modules>
         <models>
@@ -78,10 +78,5 @@
             </customer>
         </routers>
     </frontend>
-    <modules>
-        <Oggetto_Facebook>
-            <version>0.1.0</version>
-        </Oggetto_Facebook>
-    </modules>
 </config>
 
