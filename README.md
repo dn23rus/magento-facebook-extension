@@ -2,6 +2,7 @@
 
 To install set up your root composer.json in your project like this
 
+```json
     {
         "require": {
             "oggetto/facebook-extension": "1.*"
