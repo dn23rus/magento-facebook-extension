@@ -3,18 +3,20 @@
 To install set up your root composer.json in your project like this
 
 ```json
-    {
-        "require": {
-            "oggetto/facebook-extension": "1.*"
+{
+    "name": "your-vendor-name/module-or-project-name",
+    "description": "A short one line description of your module or project",
+    "require": {
+        "oggetto/facebook-extension": "1.*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.firegento.com"
         }
-        "repositories": [
-            {
-                "type": "composer",
-                "url": "http://packages.firegento.com"
-            }
-        ],
-        "extra":{
-            "magento-root-dir": "./",
-            "magento-deploystrategy": "copy"
-        }
+    ],
+    "extra":{
+        "magento-root-dir": "./",
+        "magento-deploystrategy": "copy"
     }
+}
