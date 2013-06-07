@@ -1,6 +1,6 @@
 # Oggetto Facebook extension for Magento
 
-To install set up your root composer.json in your project like this
+To install: set up your root composer.json in your project like this
 
 ```json
 {
@@ -16,7 +16,9 @@ To install set up your root composer.json in your project like this
         }
     ],
     "extra":{
-        "magento-root-dir": "./",
-        "magento-deploystrategy": "copy"
+        "magento-root-dir": "./"
     }
 }
+```
+
+Other information about installation you can find at [Magento Composer Installer](https://github.com/magento-hackathon/magento-composer-installer)
