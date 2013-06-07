@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Oggetto Web extension for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade
+ * the Oggetto Facebook module to newer versions in the future.
+ * If you wish to customize the Oggetto Facebook module for your needs
+ * please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   Oggetto
+ * @package    Oggetto_Facebook
+ * @copyright  Copyright (C) 2013 Oggetto Web (http://oggettoweb.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <global>
+        <modules>
+            <Oggetto_Facebook>
+                <version>1.0.0</version>
+            </Oggetto_Facebook>
+        </modules>
+        <models>
+            <oggetto_fb>
+                <class>Oggetto_Facebook_Model</class>
+            </oggetto_fb>
+        </models>
+        <blocks>
+            <oggetto_fb>
+                <class>Oggetto_Facebook_Block</class>
+            </oggetto_fb>
+        </blocks>
+        <helpers>
+            <oggetto_fb>
+                <class>Oggetto_Facebook_Helper</class>
+            </oggetto_fb>
+        </helpers>
+    </global>
+    <default>
+        <facebook>
+            <like_button>
+                <enabled>1</enabled>
+                <send_button>0</send_button>
+                <layout_style>standard</layout_style>
+                <width>450</width>
+                <show_faces>1</show_faces>
+                <font>arial</font>
+                <color_scheme>light</color_scheme>
+                <verb>like</verb>
+            </like_button>
+        </facebook>
+    </default>
+    <frontend>
+        <layout>
+            <updates>
+                <oggetto_fb>
+                    <file>oggetto_fb.xml</file>
+                </oggetto_fb>
+            </updates>
+        </layout>
+        <routers>
+            <customer>
+                <args>
+                    <modules>
+                        <Oggetto_Facebook before="Mage_Customer">Oggetto_Facebook</Oggetto_Facebook>
+                    </modules>
+                </args>
+            </customer>
+        </routers>
+    </frontend>
+    <modules>
+        <Oggetto_Facebook>
+            <version>0.1.0</version>
+        </Oggetto_Facebook>
+    </modules>
+</config>
+

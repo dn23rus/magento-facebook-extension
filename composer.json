@@ -1,0 +1,17 @@
+{
+    "name": "oggetto/facebook-extension",
+    "type": "magento-module",
+    "license": "OSL-3.0",
+    "description": "Oggetto Facebook extension for Magento",
+    "authors":[
+        {
+            "name":"Dmitry Buryak",
+            "email":"b.dmitry@oggettoweb.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "magento-hackathon/magento-composer-installer": "*",
+        "facebook/php-sdk": "3.*"
+    }
+}
