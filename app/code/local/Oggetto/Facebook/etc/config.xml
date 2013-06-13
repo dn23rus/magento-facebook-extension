@@ -27,7 +27,7 @@
     <global>
         <modules>
             <Oggetto_Facebook>
-                <version>1.0.2</version>
+                <version>1.0.3</version>
             </Oggetto_Facebook>
         </modules>
         <models>

@@ -143,7 +143,7 @@ class Oggetto_Facebook_Model_Facebook extends Mage_Core_Model_Abstract
     public function loginCustomer($request, $session = null)
     {
         /* @var $session Mage_Customer_Model_Session */
-        $session = $session ?: Mage::getSingleton('customer/session');
+        $session = $session ? $session : Mage::getSingleton('customer/session');
         if (!$session->isLoggedIn() && $this->getUserId()) {
             try {
                 $data = new Varien_Object($this->getUserData());
