@@ -25,38 +25,38 @@
 -->
 <layout version="0.1.0">
     <customer_account_login>
-        <update handle="customer_account_login_add_fb_like_button"/>
-        <update handle="oggetto_fb_add_fb_login_button"/>
-        <update handle="oggetto_fb_add_fb_javascript_sdk"/>
-    </customer_account_login>
-
-    <catalog_product_view>
-        <update handle="catalog_product_view_add_fb_like_button"/>
-        <update handle="oggetto_fb_add_fb_javascript_sdk"/>
-    </catalog_product_view>
-
-    <customer_account_login_add_fb_like_button>
         <reference name="customer_form_login">
             <block type="oggetto_fb/like" template="oggetto/facebook/like.phtml" name="fb_like_button_login_page"/>
         </reference>
-    </customer_account_login_add_fb_like_button>
-    <catalog_product_view_add_fb_like_button>
+        <reference name="customer_form_login">
+            <action method="setTemplate"><template>oggetto/customer/form/login.phtml</template></action>
+            <block type="oggetto_fb/facebook" template="oggetto/customer/form/login-url.phtml" name="facebook_login" as="facebook_login"/>
+        </reference>
+    </customer_account_login>
+
+    <customer_account_create>
+        <reference name="customer_form_register">
+            <action method="setTemplate"><template>oggetto/customer/form/register.phtml</template></action>
+            <block type="oggetto_fb/facebook" template="oggetto/customer/form/create-url.phtml" name="facebook_create" as="facebook_create"/>
+        </reference>
+    </customer_account_create>
+
+    <catalog_product_view>
         <reference name="product.info">
             <action method="setTemplate"><template>oggetto/catalog/product/view.phtml</template></action>
             <block type="oggetto_fb/like" template="oggetto/facebook/like.phtml" name="fb_like_button_product_page"/>
         </reference>
-    </catalog_product_view_add_fb_like_button>
+    </catalog_product_view>
 
-    <oggetto_fb_add_fb_login_button>
-        <reference name="customer_form_login">
-            <action method="setTemplate"><template>oggetto/customer/form/login.phtml</template></action>
-            <block type="oggetto_fb/facebook" template="oggetto/customer/form/url.phtml" name="facebook_login" as="facebook_login"/>
+    <PRODUCT_TYPE_bundle>
+        <reference name="product.info">
+            <action method="setTemplate"><template>oggetto/bundle/catalog/product/view.phtml</template></action>
         </reference>
-    </oggetto_fb_add_fb_login_button>
+    </PRODUCT_TYPE_bundle>
 
-    <oggetto_fb_add_fb_javascript_sdk>
-        <reference name="after_body_start">
-            <block type="oggetto_fb/jsSdk" output="toHtml" name="facebook_js_sdk" before="-"/>
+    <checkout_onepage_success translate="label">
+        <reference name="checkout.success">
+            <block type="oggetto_fb/like" template="oggetto/facebook/like.phtml" name="fb_like_button_success_page"/>
         </reference>
-    </oggetto_fb_add_fb_javascript_sdk>
+    </checkout_onepage_success>
 </layout>

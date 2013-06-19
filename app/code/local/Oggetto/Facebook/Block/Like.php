@@ -33,13 +33,17 @@
 class Oggetto_Facebook_Block_Like extends Mage_Core_Block_Template
 {
     /**
-     * Button options
+     * IFrame src
      *
-     * @return Varien_Object
+     * @return string
      */
-    public function getButtonOptions()
+    public function getIFrameSrc()
     {
-        return Mage::getModel('oggetto_fb/like')->getButtonOptions();
+        $opts = Mage::getModel('oggetto_fb/like')
+            ->getButtonOptions()
+            ->setData('href', Mage::helper('oggetto_fb')->getUrlForLikeIFrame())
+            ->getData();
+        return '//www.facebook.com/plugins/like.php?' . http_build_query($opts);
     }
 
     /**

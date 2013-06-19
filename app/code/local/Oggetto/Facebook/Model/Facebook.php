@@ -41,7 +41,11 @@ class Oggetto_Facebook_Model_Facebook extends Mage_Core_Model_Abstract
     const XML_PATH_FACEBOOK_APP_ID      = 'facebook/general/app_id';
     const XML_PATH_FACEBOOK_APP_SECRET  = 'facebook/general/secret';
 
+    const EXCEPTION_CUSTOMER_NOT_EXISTS = 5;
+
     protected $_facebookModel;
+
+    protected $_userData;
 
     /**
      * Return facebook model
@@ -106,19 +110,42 @@ class Oggetto_Facebook_Model_Facebook extends Mage_Core_Model_Abstract
     {
         return $this->getFacebookModel()->getLoginUrl(array(
             'scope'         => 'email',
-            'display'       => 'popup',
+            'display'       => 'page',
             'redirect_uri'  => Mage::getUrl('customer/account/facebookLogin'),
+        ));
+    }
+
+    /**
+     * Create account url
+     *
+     * @return string
+     */
+    public function getCreateUrl()
+    {
+        return $this->getFacebookModel()->getLoginUrl(array(
+            'scope'         => 'email',
+            'display'       => 'page',
+            'redirect_uri'  => Mage::getUrl('customer/account/facebookCreate'),
         ));
     }
 
     /**
      * User data
      *
-     * @return array
+     * @return Varien_Object
+     * @throws Mage_Core_Exception
      */
     public function getUserData()
     {
-        return (array) $this->getFacebookModel()->api('/me');
+        if (null === $this->_userData) {
+            try {
+                $this->_userData = new Varien_Object((array) $this->getFacebookModel()->api('/me'));
+            } catch (FacebookApiException $e) {
+                Mage::logException($e);
+                Mage::throwException(Mage::helper('oggetto_fb')->__('Facebook API error'));
+            }
+        }
+        return $this->_userData;
     }
 
     /**
@@ -133,50 +160,61 @@ class Oggetto_Facebook_Model_Facebook extends Mage_Core_Model_Abstract
 
     /**
      * Login with facebook.
-     * Create new customer if not exists.
      *
-     * @param Mage_Core_Controller_Request_Http $request request instance
-     * @param Mage_Customer_Model_Session       $session session
+     * @param Mage_Customer_Model_Session $session session
      * @return Oggetto_Facebook_Model_Facebook
      * @throws Mage_Core_Exception
      */
-    public function loginCustomer($request, $session = null)
+    public function loginCustomer($session = null)
     {
         /* @var $session Mage_Customer_Model_Session */
         $session = $session ? $session : Mage::getSingleton('customer/session');
         if (!$session->isLoggedIn() && $this->getUserId()) {
-            try {
-                $data = new Varien_Object($this->getUserData());
-            } catch (FacebookApiException $e) {
-                Mage::logException($e);
-                Mage::throwException(Mage::helper('oggetto_fb')->__('Facebook API error'));
-            }
-
-            /* @var $customer Mage_Customer_Model_Customer */
             $customer = Mage::getModel('customer/customer');
-            $customer->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($data->getEmail());
-
+            $customer
+                ->setWebsiteId(Mage::app()->getWebsite()->getId())
+                ->loadByEmail($this->getUserData()->getEmail());
             if ($customer->getEntityId()) {
                 $session->loginById($customer->getEntityId());
             } else {
-                $customer->setEmail($data->getEmail())
-                    ->setFirstname($data->getFirstName())
-                    ->setLastname($data->getLastName())
-                    ->setAccountConfirmation(1)
-                    ->setPassword($customer->generatePassword())
-                    ->setConfirmation($customer->getPassword());
-
-                $errors = $this->_validateCustomer($request, $customer);
-                if ($errors !== true) {
-                    Mage::throwException(nl2br(implode(PHP_EOL, $errors)));
-                }
-
-                $customer->save();
-                $customer->sendPasswordReminderEmail();
-
-                $session->setCustomerAsLoggedIn($customer);
+                throw new Mage_Core_Exception(
+                    Mage::helper('oggetto_fb')->__('Customer not exits.'),
+                    self::EXCEPTION_CUSTOMER_NOT_EXISTS
+                );
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Create customer with facebook data
+     *
+     * @param Mage_Core_Controller_Request_Http $request request instance
+     * @return Oggetto_Facebook_Model_Facebook
+     * @throws Mage_Core_Exception
+     */
+    public function createCustomer($request)
+    {
+        $data     = $this->getUserData();
+        $customer = Mage::getModel('customer/customer');
+
+        $customer->setEmail($data->getEmail())
+            ->setFirstname($data->getFirstName())
+            ->setLastname($data->getLastName())
+            ->setAccountConfirmation(1)
+            ->setPassword($customer->generatePassword())
+            ->setConfirmation($customer->getPassword())
+            ->setFacebookId($data->getId());
+
+        $errors = $this->_validateCustomer($request, $customer);
+        if ($errors !== true) {
+            Mage::throwException(nl2br(implode(PHP_EOL, $errors)));
+        }
+
+        $customer->save();
+        $customer->sendPasswordReminderEmail();
+
         return $this;
     }
 

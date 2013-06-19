@@ -74,19 +74,19 @@ class Oggetto_Facebook_Model_Like extends Mage_Core_Model_Abstract
     {
         if (null === $this->_options) {
             $this->_options = new Varien_Object(array(
+                'appId'         => Mage::getSingleton('oggetto_fb/facebook')->getFacebookAppId(),
                 'layout'        => Mage::getStoreConfig('facebook/like_button/layout_style'),
                 'width'         => Mage::getStoreConfig('facebook/like_button/width'),
                 'font'          => Mage::getStoreConfig('facebook/like_button/font'),
-                'send'          => Mage::getStoreConfigFlag('facebook/like_button/send_button') ? 'true' : 'false',
-                'show_faces'    => Mage::getStoreConfigFlag('facebook/like_button/show_faces')  ? 'true' : 'false',
+                'show_faces'    => var_export(Mage::getStoreConfigFlag('facebook/like_button/show_faces'), true),
             ));
             $verb  = Mage::getStoreConfig('facebook/like_button/verb');
             $color = Mage::getStoreConfig('facebook/like_button/color_scheme');
             if ($verb != Oggetto_Facebook_Model_System_Config_Source_Verb::DEFAULT_VALUE) {
-                $this->_options->setData('verb', $verb);
+                $this->_options->setData('action', $verb);
             }
             if ($color != Oggetto_Facebook_Model_System_Config_Source_Color::DEFAULT_VALUE) {
-                $this->_options->setData('color', $color);
+                $this->_options->setData('colorscheme', $color);
             }
         }
         return $this->_options;

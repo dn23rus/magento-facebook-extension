@@ -39,6 +39,26 @@ class Oggetto_Facebook_Block_Facebook extends Mage_Core_Block_Template
      */
     public function getLoginUrl()
     {
-        return  Mage::getSingleton('oggetto_fb/facebook')->getLoginUrl();
+        return Mage::getSingleton('oggetto_fb/facebook')->getLoginUrl();
+    }
+
+    /**
+     * Create url
+     *
+     * @return string
+     */
+    public function getCreateUrl()
+    {
+        return Mage::getSingleton('oggetto_fb/facebook')->getCreateUrl();
+    }
+
+    /**
+     * To html
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        return Mage::getSingleton('oggetto_fb/facebook')->isFacebookEnabled() ? parent::_toHtml() : '';
     }
 }

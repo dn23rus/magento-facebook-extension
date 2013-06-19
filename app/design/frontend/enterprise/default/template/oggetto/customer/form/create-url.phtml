@@ -26,14 +26,14 @@
 
 <?php
 /**
- * Facebook like button template
+ * Facebook create account link
  *
- * @var $this Oggetto_Facebook_Block_Like
+ * @var $this Oggetto_Facebook_Block_Facebook
  */
 ?>
 
-<iframe src="<?php echo $this->getIFrameSrc() ?>"
-        scrolling="no"
-        frameborder="0"
-        style="border:none; overflow:hidden; width:450px; height:80px;"
-        allowTransparency="true"></iframe>
+<div class="fieldset">
+    <h2 class="legend"><?php echo $this->__('Facebook') ?></h2>
+    <a href="<?php echo $this->getCreateUrl() ?>"><?php echo $this->__('Create account with facebook') ?></a>
+</div>
+<div class="divider"></div>

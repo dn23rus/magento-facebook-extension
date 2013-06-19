@@ -24,12 +24,12 @@
  */
 -->
 <config>
+    <modules>
+        <Oggetto_Facebook>
+            <version>2.0.0</version>
+        </Oggetto_Facebook>
+    </modules>
     <global>
-        <modules>
-            <Oggetto_Facebook>
-                <version>1.0.3</version>
-            </Oggetto_Facebook>
-        </modules>
         <models>
             <oggetto_fb>
                 <class>Oggetto_Facebook_Model</class>
@@ -45,12 +45,19 @@
                 <class>Oggetto_Facebook_Helper</class>
             </oggetto_fb>
         </helpers>
+        <resources>
+            <oggetto_facebook_setup>
+                <setup>
+                    <module>Oggetto_Facebook</module>
+                    <connection>core_setup</connection>
+                </setup>
+            </oggetto_facebook_setup>
+        </resources>
     </global>
     <default>
         <facebook>
             <like_button>
                 <enabled>1</enabled>
-                <send_button>0</send_button>
                 <layout_style>standard</layout_style>
                 <width>450</width>
                 <show_faces>1</show_faces>

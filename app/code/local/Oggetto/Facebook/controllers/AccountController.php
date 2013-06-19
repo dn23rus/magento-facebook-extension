@@ -35,7 +35,8 @@ require_once Mage::getModuleDir('controllers', 'Mage_Customer') . DS . 'AccountC
 class Oggetto_Facebook_AccountController extends Mage_Customer_AccountController
 {
     /**
-     * pre-dispatch
+     * Check customer authentication for some actions.
+     * Add 'facebookLogin' and 'facebookCreate' to open action list.
      *
      * @return void
      */
@@ -58,7 +59,8 @@ class Oggetto_Facebook_AccountController extends Mage_Customer_AccountController
             'resetpasswordpost',
             'confirm',
             'confirmation',
-            'facebookLogin'
+            'facebookLogin',
+            'facebookCreate',
         );
         $pattern = '/^(' . implode('|', $openActions) . ')/i';
 
@@ -81,17 +83,60 @@ class Oggetto_Facebook_AccountController extends Mage_Customer_AccountController
         try {
             /* @var $facebookModel Oggetto_Facebook_Model_Facebook */
             $facebookModel = Mage::getSingleton('oggetto_fb/facebook');
-            $facebookModel->loginCustomer($this->getRequest(), $this->_getSession());
+            $facebookModel->loginCustomer($this->_getSession());
             $this->_redirect('customer/account/index');
             return;
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            if ($e->getCode() === Oggetto_Facebook_Model_Facebook::EXCEPTION_CUSTOMER_NOT_EXISTS) {
+                $url = $this->_getUrl('customer/account/facebookCreate');
+                $message = $this->__(
+                    'There is no account with your facebook data. ' .
+                    '<a href="%s">Click here</a> to create an account though facebook api.', $url
+                );
+                $this->_getSession()->setEscapeMessages(false);
+            } else {
+                $message = $e->getMessage();
+            }
+            $this->_getSession()->addError($message);
+
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()
-                ->addError(Mage::helper('oggetto_fb')->__('Something went wrong while login with Facebook'));
+            $this->_getSession()->addError($this->__('Something went wrong while login with Facebook.'));
         }
         $this->_redirect('customer/account/login');
+    }
+
+    /**
+     * Facebook create account action.
+     * Forward to facebookLogin after create account.
+     *
+     * @return void
+     */
+    public function facebookCreateAction()
+    {
+        try {
+            $facebookModel = Mage::getSingleton('oggetto_fb/facebook');
+            $facebookModel->createCustomer($this->getRequest());
+            $this->_getSession()->addSuccess($this->__('The account has been successfully created.'));
+            $this->_forward('facebookLogin');
+            return;
+        } catch (Mage_Core_Exception $e) {
+            if ($e->getCode() === Mage_Customer_Model_Customer::EXCEPTION_EMAIL_EXISTS) {
+                $url = $this->_getUrl('customer/account/facebookLogin');
+                $message = $this->__(
+                    'There is already an account with this email address. ' .
+                    '<a href="%s">Click here</a> to login though facebook api.', $url
+                );
+                $this->_getSession()->setEscapeMessages(false);
+            } else {
+                $message = $e->getMessage();
+            }
+            $this->_getSession()->addError($message);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError($this->__('Something went wrong while create account with Facebook.'));
+        }
+        $this->_redirect('customer/account/create');
     }
 }
 
