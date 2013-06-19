@@ -7,7 +7,7 @@ To install: set up your root composer.json in your project like this
     "name": "your-vendor-name/module-or-project-name",
     "description": "A short one line description of your module or project",
     "require": {
-        "oggetto/facebook-extension": "1.*"
+        "oggetto/facebook-extension": "2.*"
     },
     "repositories": [
         {
