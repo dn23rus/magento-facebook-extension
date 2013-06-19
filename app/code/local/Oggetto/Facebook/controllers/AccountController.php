@@ -90,8 +90,8 @@ class Oggetto_Facebook_AccountController extends Mage_Customer_AccountController
             if ($e->getCode() === Oggetto_Facebook_Model_Facebook::EXCEPTION_CUSTOMER_NOT_EXISTS) {
                 $url = $this->_getUrl('customer/account/facebookCreate');
                 $message = $this->__(
-                    'There is no account with your facebook data. ' .
-                    '<a href="%s">Click here</a> to create an account though facebook api.', $url
+                    'There is no account with your Facebook data. ' .
+                    '<a href="%s">Click here</a> to create an account through Facebook API.', $url
                 );
                 $this->_getSession()->setEscapeMessages(false);
             } else {
@@ -125,7 +125,7 @@ class Oggetto_Facebook_AccountController extends Mage_Customer_AccountController
                 $url = $this->_getUrl('customer/account/facebookLogin');
                 $message = $this->__(
                     'There is already an account with this email address. ' .
-                    '<a href="%s">Click here</a> to login though facebook api.', $url
+                    '<a href="%s">Click here</a> to login through Facebook API.', $url
                 );
                 $this->_getSession()->setEscapeMessages(false);
             } else {
