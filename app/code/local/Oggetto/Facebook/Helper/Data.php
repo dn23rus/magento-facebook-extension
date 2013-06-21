@@ -39,28 +39,12 @@ class Oggetto_Facebook_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getUrlForLikeIFrame()
     {
-        $url = Mage::helper('core/url')->getCurrentUrl();
-
         if ($product = Mage::registry('current_product')) { // check if product page
             $url = $product->getProductUrl();
         } else {
-            $this->_checkIfOnSuccessPage($url);
+            $url = rtrim(Mage::getBaseUrl(), '/');
         }
 
         return $url;
-    }
-
-    /**
-     * Check if on success page and change url
-     *
-     * @param string &$url url
-     * @return Oggetto_Facebook_Helper_Data
-     */
-    protected function _checkIfOnSuccessPage(&$url)
-    {
-        if ('checkout/onepage/success' == trim(Mage::app()->getRequest()->getRequestString(), '/')) {
-            $url = rtrim(Mage::getBaseUrl(), '/');
-        }
-        return $this;
     }
 }
